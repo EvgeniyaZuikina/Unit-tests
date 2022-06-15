@@ -1,24 +1,26 @@
 package com.example;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+
 import java.util.List;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
-    public class AnimalTest {
+public class AnimalTest {
     private final String animalKind;
     private final List<String> expected;
     Animal animal = new Animal();
 
     public AnimalTest(String animalKind, List<String> expected) {
-    this.animalKind = animalKind;
-    this.expected = expected;
-}
+        this.animalKind = animalKind;
+        this.expected = expected;
+    }
 
     @Parameterized.Parameters
     public static Object[][] getAnimalFood() {
@@ -35,10 +37,15 @@ import static org.junit.Assert.assertThrows;
     }
 
     @Test
-    public  void  shouldBeExceptionForAnotherAnimalKind() {
-        Exception exception = assertThrows(Exception.class, () -> animal.getFood("Неизвестный"));
-        String exceptionMessage = "Неизвестный вид животного, используйте значение Травоядное или Хищник";
-        assertEquals(exceptionMessage, exception.getMessage());
+    public void shouldBeExceptionForAnotherAnimalKind() {
+        String invalidAnimal = "Неизвестный";
+        Exception actualException = null;
+        try {
+            Assert.assertEquals(animal.getFood(invalidAnimal), List.of("Неизвестный вид животного, используйте значение Травоядное или Хищник"));
+        } catch (Exception e) {
+            actualException = e;
+        }
+        assertNotNull(actualException);
     }
 
     @Test

@@ -1,20 +1,35 @@
 package com.example;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
+
 import java.util.List;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
+@RunWith(MockitoJUnitRunner.class)
 public class CatTest {
 
-    private final Feline feline = new Feline();
-    private final Cat cat = new Cat(feline);
+    Cat cat;
+
+    @Before
+    public void setUp() {
+        cat = new Cat(feline);
+    }
+
+    @Mock
+    Feline feline;
 
     @Test
     public void catEatsAnimalFood() throws Exception {
-        List<String> expected = List.of("Животные", "Птицы", "Рыба");
-        assertEquals(expected, cat.getFood());
+        Mockito.when(feline.eatMeat()).thenReturn(List.of("Животные", "Птицы", "Рыба"));
+        assertEquals(cat.getFood(), List.of("Животные", "Птицы", "Рыба"));
     }
 
     @Test
